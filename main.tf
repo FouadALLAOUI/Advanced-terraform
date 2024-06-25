@@ -1,8 +1,8 @@
 ### PROVIDER
 provider "google" {
-  project = "advancedterraform-427516" #replace this with your project-id
-  region  = "us-central1"
-  zone    = "us-central1-a"
+  project = var.project-id #replace this with your project-id
+  region  = var.region
+  zone    = var.zone
 }
 
 ### NETWORK
@@ -12,13 +12,14 @@ data "google_compute_network" "default" {
 
 ## SUBNET
 resource "google_compute_subnetwork" "subnet-1" {
-  name                     = "subnet1"
-  ip_cidr_range            = "10.127.0.0/20"
+  name                     = var.subnet-name
+  ip_cidr_range            = var.subnet-cidr
   network                  = data.google_compute_network.default.self_link
-  region                   = "us-central1"
-  private_ip_google_access = true
+  region                   = var.region
+  private_ip_google_access = var.private_google_access
 }
 
+## Firewall
 resource "google_compute_firewall" "default" {
   name    = "test-firewall"
   network = data.google_compute_network.default.self_link
