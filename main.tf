@@ -30,18 +30,21 @@ resource "google_compute_firewall" "default" {
 
   allow {
     protocol = "tcp"
-    ports    = ["80", "8080", "1000-2000", "22"]
+    ports    = var.firewall-ports
   }
 
-  source_tags = ["web"]
+  source_tags = var.compute-source-tags
 }
 
 ### COMPUTE
 ## NGINX PROXY
 resource "google_compute_instance" "nginx_instance" {
   name         = "nginx-proxy"
-  machine_type = "e2-micro"
-  tags = ["web"]
+  machine_type =  var.environment_machine_type[var.target_environment]
+  labels = {
+    envirenment = var.environment_map[var.target_environment]
+  }
+  tags = var.compute-source-tags
   
   boot_disk {
     initialize_params {
@@ -61,8 +64,11 @@ resource "google_compute_instance" "nginx_instance" {
 ## WEB1
 resource "google_compute_instance" "web1" {
   name         = "web1"
-  machine_type = "e2-micro"
-  
+  machine_type = var.environment_machine_type[var.target_environment]
+  labels = {
+    envirenment = var.environment_map[var.target_environment]
+  }
+
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
@@ -78,8 +84,11 @@ resource "google_compute_instance" "web1" {
 ## WEB2
 resource "google_compute_instance" "web2" {
   name         = "web2"
-  machine_type = "e2-micro"
-  
+  machine_type = var.environment_machine_type[var.target_environment]
+  labels = {
+    envirenment = var.environment_map[var.target_environment]
+  }
+
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
@@ -94,8 +103,11 @@ resource "google_compute_instance" "web2" {
 ## WEB3
 resource "google_compute_instance" "web3" {
   name         = "web3"
-  machine_type = "e2-micro"
-  
+  machine_type = var.environment_machine_type[var.target_environment]
+  labels = {
+    envirenment = var.environment_map[var.target_environment]
+  }
+
   boot_disk {
     initialize_params {
       image = "debian-cloud/debian-11"
@@ -111,7 +123,10 @@ resource "google_compute_instance" "web3" {
 ## DB
 resource "google_compute_instance" "mysqldb" {
   name         = "mysqldb"
-  machine_type = "e2-micro"
+  machine_type = var.environment_machine_type[var.target_environment]
+  labels = {
+    envirenment = var.environment_map[var.target_environment]
+  }
   
   boot_disk {
     initialize_params {
