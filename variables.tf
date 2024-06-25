@@ -74,7 +74,7 @@ variable "environment_machine_type" {
     "DEV" = "e2-micro",
     "QA" = "e2-micro",
     "STAGE" = "e2-micro",
-    "PROD" = "e2-micro"
+    "PROD" = "e2-medium"
   }
 }
 
